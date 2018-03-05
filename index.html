@@ -1,0 +1,44 @@
+<!-- index.html -->
+<html>
+  <head>
+    <!-- Do _not_  rely on this URL in production. Use only during development.  -->
+    <script src="https://netflix.github.io/falcor/build/falcor.browser.js"></script> 
+    <!-- For production use. -->
+    <!-- <script src="https://cdn.jsdelivr.net/falcor/{VERSION}/falcor.browser.min.js"></script> -->
+    
+  </head>
+  <body>
+    <script>
+       
+        // var model = new falcor.Model({
+        //   source: new falcor.HttpDataSource('/model.json')
+        // });
+        var model = falcor({source: new falcor.HttpDataSource('/model.json') }).batch();
+
+        model.get('categories[0..1].examples[0]["name", "price"]')
+          .then((response) => {
+            let dbValue = JSON.stringify(response, null, 4);
+            let displayName = response.json.categories[1].examples[0].name;
+            let h = document.createElement('h1');
+            h.innerText = displayName;
+            document.body.appendChild(h);
+            let pre = document.createElement('pre');
+            pre.innerText = dbValue;
+            document.body.appendChild(pre);
+
+          });
+        model.get('categories[0..1].examples[0]["name", "price"]').then((response) => {
+          console.log(response.json);
+        });
+        model.getValue('categories[0].examples[1].name').then((name) => {
+          console.log(name);
+        });
+        model.getValue('categories[0].examples[1].price').then((price) => {
+          console.log(price);
+          model.getValue('categories[0].examples[1].inStock').then((isInStock) => {
+            console.log(isInStock);
+          });
+        });
+      </script> 
+  </body>
+</html>
